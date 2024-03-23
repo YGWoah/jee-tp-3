@@ -5,14 +5,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Form Patient</title>
-    <link rel="stylesheet" href="webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
 </head>
 <body>
 <div th:include="template1 :: content">
 </div>
 <div class="container">
     <h2>Create New Patient</h2>
-    <form th:object="${patient}" th:action="@{/savePatient(keyword=${keyword},page=${page},size=${size})}" method="post">
+    <form th:object="${patient}" th:action="@{/admin/savePatient(keyword=${keyword},page=${page},size=${size})}" method="post">
         <div class="mb-3">
             <label for="name" class="form-label">ID</label>
             <input type="text" class="form-control" id="ID" th:field="*{id}" placeholder="Enter name">
