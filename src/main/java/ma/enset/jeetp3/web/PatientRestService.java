@@ -23,7 +23,12 @@ public class PatientRestService {
     @Autowired
     private PatientRepository patientRepository;
 
-    @GetMapping("/index")
+    @GetMapping("/")
+    public String home() {
+        return "redirect:/user/index";
+    }
+
+    @GetMapping("/user/index")
     public String index(Model model, @RequestParam(name = "page", defaultValue = "0") int page,
                         @RequestParam(name = "size", defaultValue = "5") int size,
                         @RequestParam(name = "keyword", defaultValue = "") String keyword) {
@@ -33,34 +38,34 @@ public class PatientRestService {
         model.addAttribute("pages", new int[patientsPages.getTotalPages()]);
         model.addAttribute("currentPage", page);
         model.addAttribute("keyword", keyword);
-        return "patients";
+        return "Home";
     }
 
 
-    @GetMapping("/delete")
+    @GetMapping("/admin/delete")
     public String delete(@RequestParam(name = "id") Long id, @RequestParam(name = "keyword", defaultValue = "") String keyword, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size) {
         patientRepository.deleteById(id);
         return "redirect:/index?page=" + page + "&size=" + size + "&keyword=" + keyword;
     }
 
-    @GetMapping("/formPatient")
+    @GetMapping("/admin/formPatient")
     public String formPatient(Model model) {
         model.addAttribute("patient", new Patient());
         return "AddPatientForm";
     }
 
-    @PostMapping("/savePatient")
+    @PostMapping("/admin/savePatient")
     public String savePatient(@Valid Patient patient, BindingResult bindingResult, @RequestParam(name = "keyword", defaultValue = "") String keyword, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size)  {
         if (bindingResult.hasErrors()) return "AddPatientForm";
         patientRepository.save(patient);
-        return "redirect:/index?page=" + page + "&size=" + size + "&keyword=" + keyword;
+        return "redirect:/user/index?page=" + page + "&size=" + size + "&keyword=" + keyword;
     }
 
-    @GetMapping("/editPatient")
+    @GetMapping("/admin/editPatient")
     public String editPatient(Model model, @RequestParam(name = "id") Long id, @RequestParam(name = "keyword", defaultValue = "") String keyword, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "5") int size) {
         Optional<Patient> patient = patientRepository.findById(id);
         if (patient.isEmpty()) {
-            return "redirect:/index?page=" + page + "&size=" + size + "&keyword=" + keyword;
+            return "redirect:/user/index?page=" + page + "&size=" + size + "&keyword=" + keyword;
         }
 
         model.addAttribute("patient", patient.get());
